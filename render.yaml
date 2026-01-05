@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: ai-chatbot-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: AI_PROVIDER
+        value: google
+      - key: GOOGLE_AI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ai-chatbot-db
+          property: connectionString
+      # Redis опционален - можно оставить пустым
+      # - key: REDIS_URL
+      #   fromService:
+      #     name: ai-chatbot-redis
+      #     type: redis
+      #     property: connectionString
+      - key: ADMIN_USER_IDS
+        sync: false
+
+databases:
+  - name: ai-chatbot-db
+    databaseName: ai_chatbot_bot
+    user: ai_chatbot_user
+    plan: free
+
+# Redis опционален - раскомментируйте, если нужен
+# redis:
+#   - name: ai-chatbot-redis
+#     plan: free
+
